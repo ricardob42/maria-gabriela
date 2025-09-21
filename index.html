@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensaje de Flores Amarillas 💛</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .envelope {
+            width: 350px;
+            height: 250px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.6s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.05) rotateY(5deg);
+        }
+
+        .envelope-back {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #f8f8f8, #e0e0e0);
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            position: absolute;
+            z-index: 1;
+        }
+
+        .envelope-front {
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            position: absolute;
+            bottom: 0;
+            border-radius: 0 0 8px 8px;
+            z-index: 3;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .envelope-flap {
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            position: absolute;
+            top: 0;
+            border-radius: 8px 8px 0 0;
+            transform-origin: bottom;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 4;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .envelope.opened .envelope-flap {
+            transform: rotateX(-180deg);
+        }
+
+        .stamp {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #FFD700, #FFA500);
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            box-shadow: 0 3px 10px rgba(255, 215, 0, 0.4);
+            animation: flowerGlow 2s infinite alternate;
+        }
+
+        .flower {
+            font-size: 32px;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes flowerGlow {
+            0% { box-shadow: 0 3px 10px rgba(255, 215, 0, 0.4); }
+            100% { box-shadow: 0 3px 20px rgba(255, 215, 0, 0.8); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .letter {
+            width: 380px;
+            height: 520px;
+            background: linear-gradient(145deg, #ffffff, #fafafa);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) translateY(100px);
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            z-index: 1;
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #333;
+            line-height: 1.7;
+            overflow: hidden;
+        }
+
+        .envelope.opened .letter {
+            opacity: 1;
+            transform: translate(-50%, -50%) translateY(-80px);
+            z-index: 10;
+        }
+
+        .letter h2 {
+            color: #FFB300;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(255, 179, 0, 0.3);
+        }
+
+        .letter p {
+            margin-bottom: 18px;
+            font-size: 15px;
+            text-align: justify;
+        }
+
+        .signature {
+            text-align: right;
+            margin-top: 35px;
+            font-style: italic;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #FFD700;
+            font-size: 14px;
+            animation: pulse 2s infinite;
+            text-align: center;
+        }
+
+        .envelope.opened .click-hint {
+            opacity: 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 6;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .sparkle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 40%; right: 15%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 1s; }
+        .sparkle:nth-child(4) { top: 60%; right: 25%; animation-delay: 1.5s; }
+        .sparkle:nth-child(5) { bottom: 20%; right: 10%; animation-delay: 0.3s; }
+
+        .floating-flowers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-flower {
+            position: absolute;
+            font-size: 20px;
+            animation: float 6s infinite linear;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-flowers" id="floatingFlowers"></div>
+    
+    <div class="container">
+        <div class="envelope" id="envelope">
+            <div class="envelope-back"></div>
+            <div class="envelope-front"></div>
+            <div class="envelope-flap">
+                <div class="stamp">
+                    <div class="flower">🌻</div>
+                </div>
+            </div>
+            
+            <div class="letter">
+                <h2>🌻 Día de las Flores Amarillas 🌻</h2>
+                <p>¡Hola mi querida amiga!</p>
+                <p>Este es un mensaje especial para recordarte lo importante que eres en mi vida. Como las flores amarillas que alegran cualquier jardín, tú iluminas mis días con tu amistad.</p>
+                <p>Que este día te llene de la misma alegría y calidez que transmites a todos los que te rodean.</p>
+                <p>¡Feliz día de las flores amarillas! 💛</p>
+                <div class="signature">Con cariño, tu amiga 💛</div>
+            </div>
+            
+            <div class="sparkles">
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+            </div>
+            
+            <div class="click-hint">✨ Haz clic en el sobre para abrir tu mensaje ✨</div>
+        </div>
+    </div>
+
+    <script>
+        // Función para abrir/cerrar el sobre
+        document.getElementById('envelope').addEventListener('click', function() {
+            this.classList.toggle('opened');
+            
+            if (this.classList.contains('opened')) {
+                // Crear más efectos de brillo cuando se abre
+                createSparkleEffect();
+            }
+        });
+
+        // Crear flores flotantes de fondo
+        function createFloatingFlowers() {
+            const container = document.getElementById('floatingFlowers');
+            const flowers = ['🌻', '🌼', '🌸', '💛'];
+            
+            setInterval(() => {
+                const flower = document.createElement('div');
+                flower.className = 'floating-flower';
+                flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+                flower.style.left = Math.random() * 100 + '%';
+                flower.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                
+                container.appendChild(flower);
+                
+                // Eliminar la flor después de la animación
+                setTimeout(() => {
+                    if (flower.parentNode) {
+                        flower.parentNode.removeChild(flower);
+                    }
+                }, 8000);
+            }, 1500);
+        }
+
+        // Efecto de brillo adicional
+        function createSparkleEffect() {
+            const envelope = document.getElementById('envelope');
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.style.position = 'absolute';
+                    sparkle.style.width = '6px';
+                    sparkle.style.height = '6px';
+                    sparkle.style.background = '#FFD700';
+                    sparkle.style.borderRadius = '50%';
+                    sparkle.style.pointerEvents = 'none';
+                    sparkle.style.left = Math.random() * 100 + '%';
+                    sparkle.style.top = Math.random() * 100 + '%';
+                    sparkle.style.animation = 'sparkle 1.5s ease-out forwards';
+                    sparkle.style.zIndex = '10';
+                    
+                    envelope.appendChild(sparkle);
+                    
+                    setTimeout(() => {
+                        if (sparkle.parentNode) {
+                            sparkle.parentNode.removeChild(sparkle);
+                        }
+                    }, 1500);
+                }, i * 100);
+            }
+        }
+
+        // Inicializar flores flotantes
+        createFloatingFlowers();
+
+        // Efecto de entrada
+        window.addEventListener('load', () => {
+            document.querySelector('.container').style.animation = 'fadeIn 1s ease-out';
+        });
+
+        // Agregar estilo para la animación de entrada
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(50px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
